@@ -1,48 +1,10 @@
-name: Test minimal versions
+--- a/.github/workflows/test-minimal.yml
++++ b/.github/workflows/test-minimal.yml
+@@ -45,4 +45,4 @@
+         run: make -C ./docs html SPHINXOPTS="-E -W --keep-going"
+ 
+       - name: Test code
+-        run: pytest --verbose --maxfail=1 --typeguard-packages=osmnx
++        run: pytest --verbose --maxfail=1 --typeguard-packages=osmnx
 
-on:
-  schedule:
-    - cron: "0 4 * * 1" # every monday at 04:00 UTC
-  workflow_dispatch:
-
-jobs:
-  build:
-    name: ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-
-    defaults:
-      run:
-        shell: bash -elo pipefail {0}
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      - name: Create environment with Micromamba
-        uses: mamba-org/setup-micromamba@v1
-        with:
-          cache-downloads: true
-          cache-environment: true
-          environment-file: environments/tests/env-test-minimal.yml
-          post-cleanup: none
-
-      - name: Install OSMnx
-        run: |
-          uv pip install -e .
-          micromamba list
-          micromamba info --all
-
-      - name: Run pre-commit checks
-        run: SKIP=no-commit-to-branch pre-commit run --all-files
-
-      - name: Test docs
-        run: make -C ./docs html SPHINXOPTS="-E -W --keep-going"
-
-      - name: Test code
-        run: pytest --verbose --maxfail=1 --typeguard-packages=osmnx
+# bfp-replay-registration: e1c76aeb2a48-llm
